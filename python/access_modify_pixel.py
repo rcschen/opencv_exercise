@@ -1,10 +1,6 @@
 import cv2
 import numpy as np
-
-def show(img):
-    cv2.imshow('show image', img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+from util import *
 
 img = cv2.imread('../data/source/roi.jpg')
 
