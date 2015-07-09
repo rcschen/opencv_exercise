@@ -58,3 +58,12 @@ def orb(img):
     img2 = cv2.drawKeypoints(img,kp,color=(0,255,0), flags=0)
     return img2
 
+def findContours(img):
+    imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+    ret,thresh = cv2.threshold(imgray,127,255,0)
+    image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE) 
+    return image, contours, hierarchy
+
+def cannyEdge(img):
+    return cv2.Canny(img,100,200)
+
