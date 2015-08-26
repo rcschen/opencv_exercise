@@ -40,13 +40,14 @@ class ROBeye():
                 if now - start > 0.1: 
                    weight, high = feature.shape
                    anchor = weight/2
-                   farthest_posisitons = findFarthestPosition(feature, weight, high)               
+                   feature = normalizeAvailableArea( feature, weight, high, 0)
+                   farthest_posisitons = findFarthestPosition(feature, weight, high, 3, 0 )
                    selected_posisiton = findNearestPosition(farthest_posisitons, anchor, weight, high)
                    print ">>>>>>>>>>>>>>>>>>>>>",selected_posisiton
                    start = now
-                cv2.imshow( 'i', feature )
-                if cv2.waitKey(1) == 27:
-                   exit(0)
+                   cv2.imshow( 'i', feature )
+                   if cv2.waitKey(1) == 27:
+                      exit(0)
 
       def test(self, method = 'cannyEdge'):
           while self.controlFlag:
@@ -78,6 +79,32 @@ def findNearestPosition( p_list, anchor, weight, high ):
        return sorted_list[0]
     else:
        return ((anchor, high),0)
+
+def normalizeAvailableArea( feature, weight, high, margin = 20 ):
+    mid = weight / 2
+    j = high-1
+    while j > 0 :
+        rightAnchor = mid
+        leftAnchor = mid
+        goRight = False
+        goLeft = False
+        while rightAnchor < weight or leftAnchor > 0:
+            if rightAnchor < weight:
+               if goRight: 
+                  feature[rightAnchor][j] = 255
+               else:
+                  if feature[rightAnchor][j] > 0:
+                     goRight = True
+            if leftAnchor > 0:
+               if goLeft:
+                  feature[leftAnchor][j] = 255
+               else:
+                  if feature[leftAnchor][j] > 0:
+                     goLeft = True
+            rightAnchor = rightAnchor + 1
+            leftAnchor = leftAnchor - 1                 
+        j = j-1 
+    return feature
 
 def findFarthestPosition( feature, weight, high, norm = 4, margin = 20 ):
     position = []

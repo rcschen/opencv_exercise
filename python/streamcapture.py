@@ -10,6 +10,7 @@ class Frame:
           self.frame = frame
 
       def showFrame(self):
+          print ';llll', self.frame
           cv2.imshow( 'i', self.frame )
           if cv2.waitKey(1) == 27:
                    exit(0)
@@ -31,13 +32,13 @@ class Frame:
 
 
 class Stream:
-     def __init__(self, url):
+      def __init__(self, url):
          self._video = urllib.urlopen(url)
          self.frameSize = 1024
 
          self._bytes = ''
 
-     def captureFrame(self):
+      def captureFrame(self):
           #_bytes = ''
          
           while True:
@@ -54,12 +55,54 @@ class Stream:
                   print 'Can not capture frame: ',e
                   return None
 
-     def ctn(self):
+      def ctn(self):
           while True:
                self.captureFrame().showFrame()
+
+class OpticalFlow:
+     def __init__(self, stream):
+         self.stream = stream
+         feature_params = dict( maxCorners = 100,
+                                qualityLevel = 0.3,
+                                minDistance = 7,
+                                blockSize = 7 )
+         self.lk_params = dict( winSize  = (15,15),
+                  maxLevel = 2,
+                  criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+ 
+         self.color = np.random.randint(0,255,(100,3))
+         self.old_frame = self.stream.captureFrame().frame
+         self.old_gray = cv2.cvtColor(self.old_frame, cv2.COLOR_BGR2GRAY)
+         self.p0 = cv2.goodFeaturesToTrack(self.old_gray, mask = None, **feature_params)
+         self.mask = np.zeros_like(self.old_frame)
+
+
+     def runof(self):
+         while(1):
+            frame = self.stream.captureFrame().frame
+            frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            self.p1, st, err = cv2.calcOpticalFlowPyrLK(self.old_gray, frame_gray, self.p0, None, **self.lk_params)
+
+            good_new = self.p1[st==1]
+            print good_new
+            good_old = self.p0[st==1]
+            for i,(new,old) in enumerate(zip(good_new,good_old)):
+                a,b = new.ravel()
+                c,d = old.ravel()
+                cv2.line(self.mask, (a,b),(c,d), self.color[i].tolist(), 2)
+                cv2.circle(frame,(a,b),5,self.color[i].tolist(),-1)
+                img = cv2.add(frame,self.mask)
+                print img 
+                Frame(img).showFrame()
+  
+                self.old_gray = frame_gray.copy()
+                self.p0 = good_new.reshape(-1,1,2)
+
+
 
 
 if __name__ == '__main__':
 
-   url ='http://192.168.2.110:8080/?action=stream' 
-   Stream(url).ctn()
+   url ='http://192.168.1.232:8080/?action=stream' 
+   stream = Stream(url)
+   OpticalFlow(stream).runof()
