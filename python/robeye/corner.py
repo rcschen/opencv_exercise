@@ -72,7 +72,7 @@ def findContours(img):
     ret,thresh = cv2.threshold(imgray,127,255,0)
     contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     print contours
-    print hierarchy
+    #print hierarchy
     return contours
 
 def drawContours(img):

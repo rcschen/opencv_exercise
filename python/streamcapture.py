@@ -4,6 +4,11 @@ import numpy as np
 import threading
 import time
 
+def showImg(img):
+    cv2.imshow( 'i', img )
+    if cv2.waitKey(1) == 27:
+       exit(0)
+  
 class Frame:
       def __init__(self, frame):
           self.timeStamp = time.time()
@@ -56,7 +61,8 @@ class Stream:
 
       def ctn(self):
           while True:
-               self.captureFrame().showFrame()
+               #self.captureFrame().showFrame()
+               self.captureFrame()
 
 class OpticalFlow:
      def __init__(self, stream):
@@ -79,27 +85,39 @@ class OpticalFlow:
                                 qualityLevel = 0.3,
                                 minDistance = 7,
                                 blockSize = 7 )
-
+         showImg(self.old_gray)
+         print self.old_gray
+         raw_input("NNNNNext...") 
          self.p0 = cv2.goodFeaturesToTrack(self.old_gray, mask = None, **feature_params)
+         showImg(self.old_gray)
+         print self.old_gray
+
+         print ">>>>>>"
          self.mask = np.zeros_like(self.old_frame)
-         print "ppppppp"
-         print self.p0
-         print "ppppppp" 
-         print type(self.p0)
 
      def refindContours(self):
          self.recapture()
+         print self.old_gray
          ret,thresh = cv2.threshold(self.old_gray,127,255,0)
          #print thresh
+         print '?????'
          p0list, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+         print self.old_gray
+         raw_input("NNNNNext...") 
+
+         print '>>>>>>',p0list
          self.p0 = p0list[0]
+         print p0list[1:]
          for i in p0list[1:]:
-             np.concatenate((self.p0,i),axis=0)
+             #print '>>>'
+             #print i
+             #print "MMM",self.p0
+             self.p0 = np.concatenate((self.p0,i),axis=0)
          print "ppppppp"
          print self.p0
 
          print "ppppppp" 
-         print type(self.p0)
+         #print type(self.p0)
 
          self.mask = np.zeros_like(self.old_frame)
      
@@ -107,12 +125,13 @@ class OpticalFlow:
          while(1):
             frame = self.stream.captureFrame().frame
             frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            print "------>",type(self.p0)
             self.p1, st, err = cv2.calcOpticalFlowPyrLK(self.old_gray, frame_gray, self.p0, None, **self.lk_params)
             #print self.p0
             #print self.p0.shape
             #print ">>>>>"
             #print "=======",st
-            #print "=======",st
+            #print "=======",err
             #print "=======",self.p1
 
             good_new = self.p1[st==1]
@@ -130,7 +149,7 @@ class OpticalFlow:
                 cv2.circle(frame,(a,b),5,self.color[i].tolist(),-1)
                 img = cv2.add(frame,self.mask)
                 #print img 
-                Frame(img).showFrame()
+                #Frame(img).showFrame()
   
                 self.old_gray = frame_gray.copy()
                 self.p0 = good_new.reshape(-1,1,2)
