@@ -1,1 +1,0 @@
-/home/cschen/opencv_exercise/c++/loadimg/CMakeFiles/LoadImage.dir

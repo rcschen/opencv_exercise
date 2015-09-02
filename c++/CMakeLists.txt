@@ -2,15 +2,12 @@ cmake_minimum_required(VERSION 2.8)
 project( Practice )
 find_package( OpenCV REQUIRED )
 set(LOCAL_INCLUDE include)
-message(include)
-message(${OpenCV_LIBS})
+set(SRC_DIR src)
+set(LIB_DIR libs)
+
 include_directories(${LOCAL_INCLUDE})
-add_executable( RotateImageWithGetRotationMatrix2D RotateImageWithGetRotationMatrix2D.cpp )
-target_link_libraries( RotateImageWithGetRotationMatrix2D ${OpenCV_LIBS} )
-add_executable( RotateRotationMatrix2DAffineTransform RotateRotationMatrix2DAffineTransform.cpp )
-target_link_libraries( RotateRotationMatrix2DAffineTransform ${OpenCV_LIBS} )
-add_library( util util.cpp )
-target_link_libraries( util  ${OpenCV_LIBS}  )
-add_executable(CvtColor CvtColor.cpp)
-target_link_libraries( CvtColor  ${OpenCV_LIBS} util )
+add_subdirectory(${SRC_DIR})
+add_subdirectory(${LIB_DIR})
+
+
 
