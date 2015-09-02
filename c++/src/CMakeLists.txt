@@ -20,4 +20,8 @@ add_executable( DisplayStream2 DisplayStream2.cpp )
 target_link_libraries( DisplayStream2 ${OpenCV_LIBS} )
 add_executable( DisplayStream DisplayStream.cpp )
 target_link_libraries( DisplayStream ${OpenCV_LIBS} )
+add_executable( CvtDIY  CvtDIY.cpp )
+target_link_libraries( CvtDIY ${OpenCV_LIBS} util)
+add_executable( CvtDIY_Point  CvtDIY_Point.cpp )
+target_link_libraries( CvtDIY_Point ${OpenCV_LIBS})
 
