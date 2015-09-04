@@ -24,4 +24,8 @@ add_executable( CvtDIY  CvtDIY.cpp )
 target_link_libraries( CvtDIY ${OpenCV_LIBS} util)
 add_executable( CvtDIY_Point  CvtDIY_Point.cpp )
 target_link_libraries( CvtDIY_Point ${OpenCV_LIBS})
+add_executable( ColorDetect  ColorDetect.cpp )
+target_link_libraries( ColorDetect ${OpenCV_LIBS} util)
+add_executable( CannyTest  CannyTest.cpp )
+target_link_libraries( CannyTest ${OpenCV_LIBS} util process)
 
