@@ -9,15 +9,12 @@ int main(int argc, char **argv)
 {
    char *fileName = argv[1];
    Mat imgOrg;
-   Mat imgEdge;
    readimg(fileName, 1, &imgOrg);
-   showimg(imgOrg);
-   imgEdge = Mat::zeros(imgOrg.rows, imgOrg.cols, CV_8UC3);
-
-   //canny_edge(&imgOrg, &imgEdge, 50.0, 100.0, 5, false );
-   canny_edge(&imgOrg, &imgEdge, 50.0, 100.0 );
+   Mat imgConer; // = Mat::zeros(imgOrg.rows, imgOrg.cols, CV_32FC3 );
 
    showimg(imgOrg);
-   showimg(imgEdge);
+   int ksize =  7; //must odd and less than 31
+   preCornerDetect_ex(&imgOrg, &imgConer, ksize);
+   showimg(imgConer);
    return 0; 
 }

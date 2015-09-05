@@ -28,4 +28,8 @@ add_executable( ColorDetect  ColorDetect.cpp )
 target_link_libraries( ColorDetect ${OpenCV_LIBS} util)
 add_executable( CannyTest  CannyTest.cpp )
 target_link_libraries( CannyTest ${OpenCV_LIBS} util process)
+add_executable( PreCornerDetectTest  PreCornerDetectTest.cpp )
+target_link_libraries( PreCornerDetectTest ${OpenCV_LIBS} util process)
+add_executable( PreCornerDetectExample  PreCornerDetectExample.cpp )
+target_link_libraries( PreCornerDetectExample ${OpenCV_LIBS})
 
