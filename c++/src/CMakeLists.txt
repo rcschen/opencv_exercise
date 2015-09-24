@@ -32,4 +32,8 @@ add_executable( PreCornerDetectTest  PreCornerDetectTest.cpp )
 target_link_libraries( PreCornerDetectTest ${OpenCV_LIBS} util process)
 add_executable( PreCornerDetectExample  PreCornerDetectExample.cpp )
 target_link_libraries( PreCornerDetectExample ${OpenCV_LIBS})
+add_executable( Reflection  Reflection.cpp )
+target_link_libraries( Reflection ${OpenCV_LIBS} util)
+add_executable( MorphologyTest  MorphologyTest.cpp )
+target_link_libraries( MorphologyTest ${OpenCV_LIBS} util process)
 

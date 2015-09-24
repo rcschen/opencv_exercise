@@ -2,9 +2,9 @@
 
 using namespace cv;
 using namespace std;
-int showimg(Mat image)
-{  namedWindow( "test", CV_WINDOW_AUTOSIZE );
-   imshow("test", image);
+int showimg(Mat image, char *frameName)
+{  //namedWindow( frameName, CV_WINDOW_AUTOSIZE );
+   imshow(frameName, image);
    waitKey(0);
    return 0; 
 }
